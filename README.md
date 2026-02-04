@@ -1,4 +1,4 @@
-# LLM 表单自动填充 Chrome 插件
+# LLM 表单自动填充 Chrome 插件（By Codex）
 
 用于在任意网页表单上，基于 JSON / 规则 / LLM 自动填充字段，提升功能测试效率。
 
