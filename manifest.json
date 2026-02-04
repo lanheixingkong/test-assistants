@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "LLM Form Autofill",
+  "version": "0.1.0",
+  "description": "Auto-fill forms using JSON, heuristics, or an OpenAI-compatible LLM.",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>", "http://*/", "https://*/"],
+  "action": {
+    "default_title": "LLM Autofill",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js"
+  }
+}

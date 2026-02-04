@@ -1,0 +1,89 @@
+:root {
+  --bg: #f6f1e7;
+  --ink: #1c1c1c;
+  --accent: #2a6f6b;
+  --card: #fff8ef;
+  --border: #d5c7b3;
+  --muted: #706a5f;
+  --danger: #b0432f;
+  font-family: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at top left, #fdf6ea, #edf4f2 70%);
+  color: var(--ink);
+}
+
+.wrap {
+  max-width: 720px;
+  margin: 24px auto 40px;
+  padding: 0 18px;
+}
+
+header h1 {
+  margin: 0 0 6px;
+}
+
+header p {
+  margin: 0 0 20px;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 12px 20px rgba(44, 40, 33, 0.08);
+}
+
+label {
+  display: block;
+  margin: 12px 0 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fffdf7;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+button {
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.status {
+  min-height: 18px;
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.status.error {
+  color: var(--danger);
+}

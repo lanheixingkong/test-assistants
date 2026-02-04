@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LLM Autofill</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>LLM Autofill</h1>
+      <label class="label" for="mode">Mode</label>
+      <select id="mode">
+        <option value="llm">LLM (Form Structure)</option>
+        <option value="json">JSON (Preferred)</option>
+        <option value="auto">Auto Heuristic</option>
+      </select>
+
+      <label class="label" for="json">Target Data (JSON)</label>
+      <textarea id="json" placeholder='{"email":"qa@example.com","name":"Test User"}'></textarea>
+
+      <div class="row">
+        <button id="fill">Fill Current Page</button>
+        <button id="openOptions" class="secondary">Config</button>
+      </div>
+
+      <p id="status" class="status"></p>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

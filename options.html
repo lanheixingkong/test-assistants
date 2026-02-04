@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LLM Autofill Config</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>LLM Autofill Config</h1>
+        <p>Store your OpenAI-compatible API settings locally in Chrome sync.</p>
+      </header>
+
+      <section class="card">
+        <label for="baseUrl">Base URL</label>
+        <input id="baseUrl" type="text" placeholder="https://api.example.com" />
+
+        <label for="model">Model Name</label>
+        <input id="model" type="text" placeholder="gpt-4o-mini" />
+
+        <label for="apiKey">API Key</label>
+        <input id="apiKey" type="password" placeholder="sk-..." />
+
+        <div class="row">
+          <button id="save">Save</button>
+          <button id="test" class="secondary">Test Connection</button>
+        </div>
+        <p id="status" class="status"></p>
+      </section>
+    </div>
+    <script src="options.js"></script>
+  </body>
+</html>
