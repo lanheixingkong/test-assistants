@@ -50,10 +50,29 @@ function ensureStatusPanel() {
   body.id = "__llm_autofill_panel_body__";
   body.textContent = "Idle";
 
+  const footer = document.createElement("div");
+  footer.style.display = "flex";
+  footer.style.justifyContent = "flex-end";
+  footer.style.marginTop = "8px";
+
+  const runBtn = document.createElement("button");
+  runBtn.id = "__llm_autofill_panel_run__";
+  runBtn.textContent = "Fill";
+  runBtn.style.background = "rgba(255,255,255,0.1)";
+  runBtn.style.border = "1px solid rgba(255,255,255,0.3)";
+  runBtn.style.color = "#fff";
+  runBtn.style.borderRadius = "8px";
+  runBtn.style.padding = "4px 8px";
+  runBtn.style.cursor = "pointer";
+  runBtn.style.fontSize = "12px";
+
+  footer.appendChild(runBtn);
+
   header.appendChild(title);
   header.appendChild(close);
   panel.appendChild(header);
   panel.appendChild(body);
+  panel.appendChild(footer);
   document.body.appendChild(panel);
 
   let dragging = false;
@@ -92,6 +111,10 @@ function ensureStatusPanel() {
     document.addEventListener("mouseup", onMouseUp);
   });
 
+  runBtn.addEventListener("click", () => {
+    runAutofillFromPanel();
+  });
+
   return panel;
 }
 
@@ -117,6 +140,43 @@ function startPanelTick(message) {
 function stopPanelTick() {
   if (panelTickTimer) clearInterval(panelTickTimer);
   panelTickTimer = null;
+}
+
+let panelRunning = false;
+
+async function runAutofillFromPanel() {
+  if (panelRunning) return;
+  panelRunning = true;
+  const runBtn = document.getElementById("__llm_autofill_panel_run__");
+  if (runBtn) runBtn.disabled = true;
+
+  try {
+    const { lastMode, lastJson } = await chrome.storage.sync.get({
+      lastMode: "llm",
+      lastJson: ""
+    });
+    let targetData = null;
+    if (lastMode === "json") {
+      if (!lastJson) {
+        updateStatusPanel("Missing JSON. Open popup to set.");
+        return;
+      }
+      try {
+        targetData = JSON.parse(lastJson);
+      } catch (err) {
+        updateStatusPanel("Invalid JSON. Open popup to fix.");
+        return;
+      }
+    }
+
+    const requestId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    await fillWithMode(lastMode, targetData, requestId);
+  } catch (err) {
+    updateStatusPanel(`Autofill failed: ${err.message || "error"}`);
+  } finally {
+    panelRunning = false;
+    if (runBtn) runBtn.disabled = false;
+  }
 }
 
 function sendProgress(requestId, text, tick = false) {

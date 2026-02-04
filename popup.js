@@ -7,6 +7,7 @@ let currentRequestId = null;
 let tickTimer = null;
 let tickStart = 0;
 let lastBaseStatus = "";
+let settingsLoaded = false;
 
 function setStatus(msg, isError = false) {
   statusEl.textContent = msg;
@@ -44,6 +45,25 @@ openOptionsBtn.addEventListener("click", () => {
   chrome.runtime.openOptionsPage();
 });
 
+async function loadLastSettings() {
+  if (settingsLoaded) return;
+  const { lastMode, lastJson } = await chrome.storage.sync.get({
+    lastMode: "llm",
+    lastJson: ""
+  });
+  modeEl.value = lastMode;
+  if (lastJson) jsonEl.value = lastJson;
+  settingsLoaded = true;
+}
+
+modeEl.addEventListener("change", async () => {
+  await chrome.storage.sync.set({ lastMode: modeEl.value });
+});
+
+jsonEl.addEventListener("blur", async () => {
+  await chrome.storage.sync.set({ lastJson: jsonEl.value.trim() });
+});
+
 fillBtn.addEventListener("click", async () => {
   currentRequestId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   setStatus("Injecting...");
@@ -64,6 +84,7 @@ fillBtn.addEventListener("click", async () => {
       if (targetData === null || Array.isArray(targetData)) {
         throw new Error("JSON must be an object.");
       }
+      await chrome.storage.sync.set({ lastJson: raw });
     } catch (err) {
       setStatus(`Invalid JSON: ${err.message}`, true);
       stopTick();
@@ -97,6 +118,7 @@ fillBtn.addEventListener("click", async () => {
 
     if (response?.ok) {
       setStatus(`Filled ${response.count} fields.`);
+      await chrome.storage.sync.set({ lastMode: modeEl.value });
     } else {
       setStatus(response?.error || "Failed to fill.", true);
     }
@@ -107,3 +129,5 @@ fillBtn.addEventListener("click", async () => {
     fillBtn.disabled = false;
   }
 });
+
+loadLastSettings();
